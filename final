@@ -1,0 +1,81 @@
+# The Effect of Covid-19 on Unemployment Rate in the United States
+
+## Program Purpose
+> The covid-19 outbreak caused various global problems, including rising unemployment. It significantly impacted young workers, women, workers with low educational attainment, part-time workers, and racial and ethnic minorities.
+According to [Pew Research Center](https://www.pewresearch.org/fact-tank/2020/06/11/unemployment-rose-higher-in-three-months-of-covid-19-than-it-did-in-two-years-of-the-great-recession/#:~:text=Unemployment%20rose%20higher%20in%20three,years%20of%20the%20Great%20Recession&text=The%20COVID%2D19%20outbreak%20and,20.5%20million%20in%20May%202020),
+The outbreak of COVID-19 and the economic downturn it generated have raised the ranks of unemployed Americans by over 14 million, from 6.2 million in February to 20.5 million in May 2020. 
+
+>The program's purpose is to analyze the overall rate of unemployment throughout the United States and compare each state's status 
+with an average rate to check how many states have low and high rate since Covid-19 started.
+
+> For accuracy, this program's data was collected from the [Bureau of Labor Statistics](https://www.bls.gov/home.htm), a unit of the United States Department of Labor.
+> As for the library, Pandas, Matplotlib, and BeautifulSoup, were used for the program. Each library was to manipulate tables and variables from data,
+visualize the data frame, and pull data out of the HTML file. All libraries were used in Jupyter. 
+> ![image of pandas, matplotlib](https://pythonforundergradengineers.com/posts/matplotlib/images/four_logos.png)
+
+## Installation for Each Library:
+* `pip install pandas`
+* `pip3 install matplotlib`
+* `pip install beautifulsoup4`
+
+## Visualizing the unemployment rate between October 2019 and October 2020 
+> To see the difference in rate after covid-19 outbreak, the chart that shows civilian unemployment rate was used for the program.
+> Since the file was in HTML file, the data was converted into csv file by using BeautifulSoup.
+
+```
+import pandas as pd
+
+import os
+
+import sys
+
+from bs4 import BeautifulSoup
+
+path = 'unemployment rate.html'
+
+data = []
+
+# Getting the header from HTML file
+
+list_header = [] 
+soup = BeautifulSoup(open(path),'html.parser') 
+header = soup.find_all("table")[0].find("tr") 
+
+for items in header: 
+    try: 
+        list_header.append(items.get_text()) 
+    except: 
+        continue
+        
+# Getting the data
+
+HTML_data = soup.find_all("table")[0].find_all("tr")[1:]
+
+for element in HTML_data: 
+    sub_data = [] 
+    for sub_element in element: 
+        try: 
+            sub_data.append(sub_element.get_text()) 
+        except: 
+            continue
+    data.append(sub_data)
+    
+ # Storing data into Pandas
+ 
+ dataFrame = pd.DataFrame(data = data, columns = list_header)
+ 
+ # Converting Pandas DataFrame into csv file
+ 
+ dataFrame.to_csv('unemploymentrate.csv.') 
+ 
+ ```
+ >Then to create the bar graph out of the chart, matplotlib was used:
+ 
+ ```
+ import matplotlib.pyplot as plt
+ 
+ df.plot(x ='Month', y='Unemployment Rate', kind = 'bar')
+ plt.show()
+ 
+ ```
+![img](unemploymentrate.md)
